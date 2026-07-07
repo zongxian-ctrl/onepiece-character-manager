@@ -5,12 +5,24 @@ function formatBounty(bounty) {
   return "Ƀ " + Number(bounty).toLocaleString("en-US");
 }
 
+// Seeded images use root-relative paths ("/characters/x.jpg"). On GitHub Pages
+// the app is served from a subpath, so prefix those with Vite's BASE_URL.
+// Absolute (http) URLs and empty values pass through unchanged.
+function resolveSrc(url) {
+  if (!url) return PLACEHOLDER;
+  if (/^https?:\/\//.test(url)) return url;
+  if (url.startsWith("/")) {
+    return import.meta.env.BASE_URL.replace(/\/$/, "") + url;
+  }
+  return url;
+}
+
 export default function CharacterCard({ character, onEdit, onDelete }) {
   return (
     <article className="card">
       <img
         className="card-avatar"
-        src={character.image_url || PLACEHOLDER}
+        src={resolveSrc(character.image_url)}
         alt={character.name}
         onError={(e) => { e.currentTarget.src = PLACEHOLDER; }}
       />
