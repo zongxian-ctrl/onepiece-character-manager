@@ -1,7 +1,9 @@
 const express = require("express");
 const validateCharacter = require("../validate");
+const { rollStats } = require("../game");
 
-const COLUMNS = "id, name, epithet, crew, devil_fruit, bounty, role, image_url, description, created_at";
+const COLUMNS =
+  "id, name, epithet, crew, devil_fruit, bounty, role, image_url, description, created_at, max_hp, hp, attack, defense";
 
 module.exports = function charactersRouter(db) {
   const router = express.Router();
@@ -33,11 +35,13 @@ module.exports = function charactersRouter(db) {
     const info = db
       .prepare(`
         INSERT INTO characters
-          (name, epithet, crew, devil_fruit, bounty, role, image_url, description, created_at)
+          (name, epithet, crew, devil_fruit, bounty, role, image_url, description, created_at,
+           max_hp, hp, attack, defense)
         VALUES
-          (@name, @epithet, @crew, @devil_fruit, @bounty, @role, @image_url, @description, @created_at)
+          (@name, @epithet, @crew, @devil_fruit, @bounty, @role, @image_url, @description, @created_at,
+           @max_hp, @hp, @attack, @defense)
       `)
-      .run({ ...value, created_at: new Date().toISOString() });
+      .run({ ...value, ...rollStats(value.bounty), created_at: new Date().toISOString() });
     res.status(201).json(getById.get(info.lastInsertRowid));
   });
 

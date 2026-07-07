@@ -1,4 +1,6 @@
 node_modules/
+.node-portable/
+CLAUDE.local.md
 server/characters.db
 server/*.db
 server/*.db-*

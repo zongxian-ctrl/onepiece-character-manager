@@ -6,7 +6,11 @@ Guidance for Claude Code (and future sessions) working in this repository.
 
 A CRUD web app for managing One Piece characters, persisted in SQLite. The UI
 is themed as a Marine "Bounty Registry" — character cards are rendered as
-weathered WANTED posters. Built as a learning project.
+weathered WANTED posters. On top of the CRUD registry sits a **battle game**:
+the user is a bounty hunter with a health bar, attack/defense stats, and a
+berry wallet; they attack characters (who hit back), collect bounties on
+capture, and spend them in a Trading Post shop (potions, stat training,
+weapon/armor tiers). Built as a learning project.
 
 ## Architecture
 
@@ -17,6 +21,24 @@ Two independent packages:
   the backend (see `client/vite.config.js`), so there is no CORS setup.
 
 Ports: backend **3001**, Vite dev server **5173**.
+
+### Static (GitHub Pages) mode
+
+The live demo (https://zongxian-ctrl.github.io/onepiece-character-manager/) is
+a **backend-less build** deployed by `.github/workflows/deploy-pages.yml` on
+every push to `main`. How it works:
+
+- `client/src/api.js` holds two implementations behind one interface: `remote`
+  (fetch against `/api`) and `local` (a `localStorage` store seeded from the
+  bundled `client/src/seed-data.json`). Building with `VITE_STATIC=1` selects
+  `local`; otherwise `remote`. **Any new API operation must be added to both**,
+  and `App.jsx` must stay unaware of which one is active.
+- The workflow also sets `VITE_BASE=/<repo>/` because Pages serves from a
+  subpath (`vite.config.js` uses it as `base`, defaulting to `/` locally).
+  Root-relative asset paths stored in data (e.g. `image_url: "/characters/…"`)
+  don't get rewritten by Vite, so they are prefixed with
+  `import.meta.env.BASE_URL` at render time (`CharacterCard.jsx`). Do the same
+  for any new root-relative asset reference, or it will 404 on Pages.
 
 ### Backend design (dependency injection)
 
@@ -33,6 +55,31 @@ API testable against an in-memory DB:
   `app.listen`. Keep `listen` out of `app.js`.
 - `validate.js` exports `validateCharacter(body) -> { valid, errors, value }` —
   pure, no DB or HTTP. Reused by POST and PUT.
+- `game.js` exports the battle/shop logic (`rollStats`, `resolveAttack`,
+  `shopCatalog`, `applyPurchase`, `PLAYER_DEFAULTS`) — pure functions; anything
+  that rolls dice takes an injectable `rng` so tests are deterministic.
+- `routes/game.js` exports `gameRouter(db)`, mounted at `/api`:
+  `GET /api/player`, `GET /api/shop`, `POST /api/shop/:item`,
+  `POST /api/battle/:id` (one attack round), `POST /api/battle/reset`.
+
+### Battle system
+
+- Characters carry `max_hp, hp, attack, defense` columns. Stats are rolled at
+  creation/seed time by `rollStats(bounty)` — random, but log-scaled by bounty
+  so big names are stronger. `db.js` migrates older DBs in place (ALTER TABLE +
+  backfill), so an existing `characters.db` keeps working.
+- The singleton `player` table (id = 1) holds hp, stats, wallet, and upgrade
+  levels; `db.js` inserts the default row when missing.
+- One attack round: player strikes; if the target survives, it counterattacks.
+  Capture (hp 0) pays the character's bounty into the wallet, once — captured
+  targets return 400 on further attacks. Player death revives at full HP and
+  costs 10% of the wallet in "medical fees". `POST /api/battle/reset` restores
+  every character to full HP so bounties can be farmed again.
+- **`client/src/game.js` is an ESM mirror of `server/game.js`** so the static
+  (Pages) build can run the whole game in localStorage. If you change balance
+  numbers or formulas in one, change the other.
+- CRUD is unaffected: PUT still replaces only the form fields, so battle state
+  (current hp, rolled stats) survives edits.
 
 ### Conventions
 
@@ -57,11 +104,14 @@ API testable against an in-memory DB:
 cd server && npm install      # install (fetches better-sqlite3 prebuilt binary)
 cd server && npm start        # run API on :3001 (creates/seeds characters.db)
 cd server && npm test         # jest + supertest, in-memory DB
+cd server && npx jest tests/characters.test.js        # one test file
+cd server && npx jest -t "rejects missing name"      # one test by name
 
 # Frontend
 cd client && npm install
 cd client && npm run dev      # Vite dev server on :5173 (proxies /api)
 cd client && npm run build    # production build (catches import/syntax errors)
+# Static (Pages) build, as CI does it: VITE_STATIC=1 npm run build
 ```
 
 ## Testing approach
@@ -86,9 +136,11 @@ cd client && npm run build    # production build (catches import/syntax errors)
 
 ## Seed data & character images
 
-- `server/seed.js` holds ~36 notable characters and is **generated** by
-  `scripts/build-seed.mjs` — edit the curated list in that script, not the seed
-  file. The script fetches each character's portrait from the Jikan
+- `scripts/build-seed.mjs` **generates two files** from its curated list of
+  ~36 characters: `server/seed.js` (backend seed) and
+  `client/src/seed-data.json` (seed for the static/Pages build). Edit the
+  curated list in the script, never the generated files, and keep both in sync
+  by regenerating. The script fetches each character's portrait from the Jikan
   (MyAnimeList) API and downloads it into `client/public/characters/<slug>.jpg`;
   `image_url` in the seed points at that local path (served by the client, so
   the app works offline). Character metadata (bounty, crew, Devil Fruit, etc.)

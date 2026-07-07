@@ -19,7 +19,14 @@ per-visitor, not shared). The local full-stack app below is unaffected.
 ## Features
 
 - Full CRUD: create, read, update, delete characters
-- Persistent storage via SQLite (`better-sqlite3`)
+- **Bounty-hunting battle game**: every character has an HP bar and
+  attack/defense stats (random, scaled by bounty). You have a big health bar,
+  baseline stats, and a berry wallet — attack characters, take counterattacks,
+  and claim their bounty when you capture them. Defeated posters get a red
+  CAPTURED stamp.
+- **Trading Post shop**: spend bounty money on healing tonics, attack/defense
+  training (escalating prices), and tiered weapon/armor upgrades.
+- Persistent storage via SQLite (`better-sqlite3`) — battle state included
 - Search/filter by name or crew
 - Validation on both client and server
 - Character images (URL) with a placeholder fallback
@@ -99,6 +106,11 @@ Base path: `/api/characters`
 | POST   | `/api/characters`          | Create (validated)                        | 201/400 |
 | PUT    | `/api/characters/:id`      | Full-replace update (validated)           | 200/400/404 |
 | DELETE | `/api/characters/:id`      | Delete                                    | 204/404 |
+| GET    | `/api/player`              | Your hunter (hp, stats, wallet, upgrades) | 200     |
+| POST   | `/api/battle/:id`          | One attack round vs character `:id`       | 200/400/404 |
+| POST   | `/api/battle/reset`        | Restore every character to full health    | 200     |
+| GET    | `/api/shop`                | Shop catalog priced for the current player| 200     |
+| POST   | `/api/shop/:item`          | Buy `potion`/`attack`/`defense`/`weapon`/`armor` | 200/400 |
 | GET    | `/api/health`              | Health check → `{ "ok": true }`           | 200     |
 
 **Character shape:**

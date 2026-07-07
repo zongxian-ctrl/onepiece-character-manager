@@ -482,6 +482,392 @@ body {
   }
 }
 
+/* =========================================================================
+   Battle layer — the registry becomes the hunter's campaign board.
+   Signature: the red CAPTURED stamp that slams across a defeated poster.
+   ========================================================================= */
+
+/* ---------- Hunter's ledger HUD ---------- */
+.hud {
+  position: sticky;
+  top: 0.6rem;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  background: linear-gradient(170deg, #241708 0%, var(--ink) 70%);
+  border: 2px solid var(--gold);
+  border-radius: 2px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(0, 0, 0, 0.6);
+  padding: 0.8rem 1.1rem;
+  margin-bottom: 0.6rem;
+}
+
+.hud-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.hud-eyebrow {
+  font-family: var(--font-type);
+  font-size: var(--step--1);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.hud-wallet {
+  font-family: var(--font-name);
+  font-weight: 700;
+  font-size: var(--step-1);
+  color: var(--parchment);
+  white-space: nowrap;
+}
+
+.hud-health {
+  position: relative;
+  min-width: 160px;
+}
+
+.hud-hp-track {
+  position: relative;
+  height: 1.7rem;
+  background: rgba(0, 0, 0, 0.55);
+  border: 2px solid var(--gold);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.hud-hp-fill {
+  height: 100%;
+  background: linear-gradient(180deg, #e0b558 0%, var(--gold) 55%, #9a6f1e 100%);
+  transition: width 0.45s ease;
+}
+
+.hud-hp-track.is-low .hud-hp-fill {
+  background: linear-gradient(180deg, #d4534a 0%, var(--marine-red) 55%, var(--marine-red-dark) 100%);
+  animation: lowPulse 1.2s ease-in-out infinite;
+}
+
+.hud-hp-num {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-type);
+  font-size: var(--step--1);
+  color: var(--parchment);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.hud-stats {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.hud-stat {
+  font-family: var(--font-type);
+  font-size: var(--step--1);
+  letter-spacing: 0.08em;
+  color: var(--parchment);
+  border: 1px solid rgba(200, 149, 47, 0.6);
+  border-radius: 2px;
+  padding: 0.3rem 0.55rem;
+  white-space: nowrap;
+}
+
+.hud-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.hud-btn {
+  font-family: var(--font-name);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: var(--step--1);
+  color: var(--parchment);
+  background: transparent;
+  border: 2px solid var(--gold);
+  border-radius: 2px;
+  padding: 0.5rem 0.85rem;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease, transform 0.12s ease;
+}
+
+.hud-btn:hover {
+  background: var(--gold);
+  color: var(--ink);
+}
+
+.hud-btn-shop {
+  background: var(--marine-red);
+  border-color: var(--marine-red-dark);
+  box-shadow: 0 3px 0 var(--marine-red-dark);
+}
+
+.hud-btn-shop:hover {
+  background: var(--marine-red-dark);
+  color: var(--parchment);
+}
+
+.hud-btn:active {
+  transform: translateY(2px);
+}
+
+/* Latest battle-log entry, written like a ledger line */
+.ledger-line {
+  font-family: var(--font-type);
+  font-size: var(--step--1);
+  letter-spacing: 0.06em;
+  color: var(--parchment);
+  opacity: 0.85;
+  margin: 0 0 1.25rem;
+  padding-left: 0.2rem;
+}
+
+/* ---------- Card health & stats ---------- */
+.hp-track {
+  height: 0.65rem;
+  background: rgba(45, 30, 18, 0.18);
+  border: 1px solid var(--ink-soft);
+  border-radius: 1px;
+  overflow: hidden;
+  margin: 0 0.35rem;
+}
+
+.hp-fill {
+  height: 100%;
+  background: linear-gradient(180deg, #c8564d 0%, var(--marine-red) 60%, var(--marine-red-dark) 100%);
+  transition: width 0.45s ease;
+}
+
+.card-stats {
+  font-family: var(--font-type);
+  font-size: var(--step--1);
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin: 0.4rem 0 0;
+}
+
+/* ---------- Attack action ---------- */
+.card-actions .attack-btn {
+  background: var(--marine-red);
+  border-color: var(--marine-red-dark);
+  color: var(--parchment);
+  box-shadow: 0 2px 0 var(--marine-red-dark);
+}
+
+.card-actions .attack-btn:hover {
+  background: var(--marine-red-dark);
+  color: var(--parchment);
+}
+
+/* ---------- Hit feedback ---------- */
+.card.is-hit {
+  animation: cardShake 0.35s ease;
+}
+
+.dmg-float {
+  position: absolute;
+  top: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-name);
+  font-weight: 900;
+  font-size: var(--step-2);
+  color: var(--marine-red);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+  z-index: 5;
+  animation: floatUp 0.9s ease-out forwards;
+}
+
+.dmg-float-hud {
+  top: -0.4rem;
+  color: #e0b558;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  font-size: var(--step-1);
+}
+
+/* ---------- Captured poster ---------- */
+.card.captured {
+  filter: grayscale(0.75) sepia(0.25);
+  opacity: 0.88;
+}
+
+.card.captured::before {
+  color: var(--ink-soft);
+}
+
+.stamp {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-14deg);
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--marine-red);
+  border: 4px double var(--marine-red);
+  border-radius: 3px;
+  padding: 0.25rem 0.8rem;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 4;
+  animation: stampIn 0.35s cubic-bezier(0.2, 1.6, 0.45, 1) both;
+}
+
+.bounty-claimed {
+  font-family: var(--font-type);
+  font-size: var(--step-0);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ---------- Trading Post ---------- */
+.shop-wallet {
+  font-family: var(--font-name);
+  font-weight: 700;
+  text-align: center;
+  color: var(--ink);
+  margin: -0.5rem 0 1rem;
+}
+
+.shop-list {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.shop-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0.2rem;
+  border-bottom: 1px dotted var(--ink-soft);
+}
+
+.shop-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.shop-item-name {
+  font-family: var(--font-type);
+  font-size: var(--step-0);
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.shop-item-effect {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+.shop-item-buy {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  white-space: nowrap;
+}
+
+.shop-item-price {
+  font-family: var(--font-name);
+  font-weight: 700;
+  font-size: var(--step-0);
+  color: var(--ink);
+}
+
+.shop-item-buy button {
+  font-family: var(--font-name);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--step--1);
+  padding: 0.4rem 0.9rem;
+  border: 2px solid var(--marine-red-dark);
+  border-radius: 2px;
+  background: var(--marine-red);
+  color: var(--parchment);
+  cursor: pointer;
+  box-shadow: 0 2px 0 var(--marine-red-dark);
+  transition: transform 0.1s ease;
+}
+
+.shop-item-buy button:disabled {
+  background: transparent;
+  color: var(--ink-soft);
+  border-color: var(--ink-soft);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.shop-item-buy button:not(:disabled):active {
+  transform: translateY(2px);
+}
+
+/* ---------- Battle animations ---------- */
+@keyframes stampIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(-14deg) scale(1.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(-14deg) scale(1);
+  }
+}
+
+@keyframes floatUp {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+  to {
+    opacity: 0;
+    translate: 0 -2.2rem;
+  }
+}
+
+@keyframes cardShake {
+  0%, 100% { translate: 0 0; }
+  25% { translate: -5px 0; }
+  50% { translate: 4px 0; }
+  75% { translate: -2px 0; }
+}
+
+@keyframes lowPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
+/* ---------- Battle responsive ---------- */
+@media (max-width: 720px) {
+  .hud {
+    grid-template-columns: 1fr 1fr;
+  }
+  .hud-health {
+    grid-column: 1 / -1;
+    order: -1;
+  }
+  .hud-actions {
+    justify-content: flex-end;
+  }
+}
+
 /* ---------- Motion preferences ---------- */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -489,8 +875,12 @@ body {
   .add-btn,
   .card-actions button {
     transition: none !important;
+    animation: none !important;
   }
   .card:nth-child(n) {
     transform: none;
+  }
+  .dmg-float {
+    display: none;
   }
 }
