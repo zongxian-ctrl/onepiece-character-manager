@@ -12,7 +12,8 @@ them, and see character avatars.
 
 - **Backend:** Node.js + Express (REST API)
 - **Frontend:** React + Vite
-- **Persistence:** SQLite (single-file database, survives restarts)
+- **Persistence:** SQLite via `better-sqlite3` (synchronous API, single-file
+  database, native `:memory:` support for tests)
 
 ## Architecture
 
@@ -36,6 +37,10 @@ crud-project/
 The frontend talks to the backend over a REST API rooted at `/api/characters`.
 In development, the Vite dev server proxies `/api` to Express to avoid CORS.
 
+`db.js` exports a **factory** (e.g. `createDb(path)`) rather than a single
+fixed connection, so the app opens `characters.db` while tests inject
+`:memory:`. Schema init and seeding run against whichever connection is passed.
+
 ## Data Model
 
 Table `characters`:
@@ -47,7 +52,7 @@ Table `characters`:
 | epithet     | TEXT                     | e.g. "Straw Hat"            |
 | crew        | TEXT                     | affiliation                 |
 | devil_fruit | TEXT                     | nullable                    |
-| bounty      | INTEGER                  | in berries, numeric         |
+| bounty      | INTEGER                  | in berries; 64-bit, holds billions |
 | role        | TEXT                     | e.g. Captain, Navigator     |
 | image_url   | TEXT                     | shown as avatar             |
 | description | TEXT                     | free text                   |
@@ -64,8 +69,13 @@ Table `characters`:
 | DELETE | `/api/characters/:id`      | delete                           |
 
 Backend validation: `name` required (non-empty); `bounty`, if present, must be
-a non-negative integer. Validation failures return `400` with a JSON error
-message. Missing resources return `404`.
+a non-negative integer (bounties reach the billions — parsed as a JS number,
+which is safe well beyond that). Validation failures return `400` with a JSON
+error message. Missing resources return `404`.
+
+`PUT` is a **full replace**: the client sends all editable fields and the row
+is overwritten. This matches the reused create/edit form, which always submits
+the complete field set.
 
 ## Frontend Flow
 
@@ -74,6 +84,10 @@ card shows avatar, name, epithet, and bounty, with Edit and Delete actions. An
 "Add Character" button opens a form. The same form component handles both
 create and edit. Client-side validation mirrors the backend rules. Application
 state lives in `App.jsx`; the character list is re-fetched after each mutation.
+
+The UI shows a loading state while fetching and surfaces API failures inline
+(an error message) rather than failing silently. Delete prompts for
+confirmation before removing a character.
 
 ## Extras
 
