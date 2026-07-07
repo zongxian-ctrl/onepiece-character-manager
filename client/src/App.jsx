@@ -34,14 +34,12 @@ export default function App() {
   function closeForm() { setShowForm(false); setEditing(null); }
 
   async function handleSubmit(body) {
-    try {
-      if (editing && editing.id) await updateCharacter(editing.id, body);
-      else await createCharacter(body);
-      closeForm();
-      load(search);
-    } catch (e) {
-      setError(e.message);
-    }
+    // Let errors propagate so CharacterForm can surface them inside the modal
+    // (a banner here would render hidden behind the modal backdrop).
+    if (editing && editing.id) await updateCharacter(editing.id, body);
+    else await createCharacter(body);
+    closeForm();
+    load(search);
   }
 
   async function handleDelete(c) {

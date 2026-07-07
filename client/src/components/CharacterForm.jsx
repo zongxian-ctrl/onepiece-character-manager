@@ -13,7 +13,7 @@ export default function CharacterForm({ initial, onSubmit, onCancel }) {
     setForm((f) => ({ ...f, [field]: val }));
   }
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
     if (!form.name.trim()) { setError("Name is required."); return; }
     if (form.bounty !== "" && (!/^\d+$/.test(String(form.bounty)))) {
@@ -21,7 +21,11 @@ export default function CharacterForm({ initial, onSubmit, onCancel }) {
       return;
     }
     setError("");
-    onSubmit({ ...form, bounty: form.bounty === "" ? null : Number(form.bounty) });
+    try {
+      await onSubmit({ ...form, bounty: form.bounty === "" ? null : Number(form.bounty) });
+    } catch (err) {
+      setError(err.message || "Could not save. Please try again.");
+    }
   }
 
   return (
