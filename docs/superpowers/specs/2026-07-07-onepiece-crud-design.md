@@ -77,6 +77,15 @@ error message. Missing resources return `404`.
 is overwritten. This matches the reused create/edit form, which always submits
 the complete field set.
 
+## Visual Design
+
+The frontend's visual direction is developed using the project-local
+`frontend-design` skill (`.claude/skills/frontend-design/`). Rather than a
+templated CRUD look, the UI grounds its identity in the One Piece world —
+deliberate palette, display/body type pairing, and one signature element —
+following the skill's two-pass process (plan → critique against the brief →
+build). This work happens during the frontend implementation phase.
+
 ## Frontend Flow
 
 Single-page UI: a search bar above a responsive grid of character cards. Each
