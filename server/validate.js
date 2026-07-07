@@ -12,7 +12,7 @@ function validateCharacter(body) {
     value.bounty = null;
   } else {
     const n = Number(body.bounty);
-    if (!Number.isInteger(n) || n < 0) {
+    if (!Number.isSafeInteger(n) || n < 0) {
       errors.push("bounty must be a non-negative integer");
       value.bounty = null;
     } else {

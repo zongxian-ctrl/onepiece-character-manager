@@ -77,4 +77,15 @@ describe("characters API", () => {
     const after = await request(app).get(`/api/characters/${created.body.id}`);
     expect(after.status).toBe(404);
   });
+
+  test("malformed JSON body returns 400 as JSON, not HTML", async () => {
+    const { app } = makeApp();
+    const res = await request(app)
+      .post("/api/characters")
+      .set("Content-Type", "application/json")
+      .send('{ "name": '); // deliberately broken JSON
+    expect(res.status).toBe(400);
+    expect(res.headers["content-type"]).toMatch(/application\/json/);
+    expect(res.body.error).toBeDefined();
+  });
 });

@@ -29,4 +29,9 @@ describe("validateCharacter", () => {
     expect(valid).toBe(true);
     expect(value.bounty).toBeNull();
   });
+
+  test("rejects a bounty beyond safe integer range", () => {
+    const { valid } = validateCharacter({ name: "X", bounty: "99999999999999999999" });
+    expect(valid).toBe(false);
+  });
 });

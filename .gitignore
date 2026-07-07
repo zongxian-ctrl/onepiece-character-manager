@@ -1,6 +1,7 @@
 node_modules/
 server/characters.db
 server/*.db
+server/*.db-*
 dist/
 .env
 *.log
