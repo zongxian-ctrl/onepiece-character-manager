@@ -1,0 +1,496 @@
+/* =========================================================================
+   One Piece Character Manager — "Marine Bounty Registry"
+   Signature: character cards rendered as weathered WANTED posters pinned
+   to a deep Grand Line ocean board.
+   ========================================================================= */
+
+:root {
+  /* Palette */
+  --sea-deep: #0a3846;
+  --sea-mid: #12566b;
+  --parchment: #efe3c6;
+  --parchment-2: #e7d7b2;
+  --parchment-edge: #cdb488;
+  --ink: #2d1e12;
+  --ink-soft: #5a4632;
+  --marine-red: #b23029;
+  --marine-red-dark: #8f261f;
+  --gold: #c8952f;
+
+  /* Type roles */
+  --font-display: "Rye", "Special Elite", cursive;
+  --font-name: "Cinzel", Georgia, serif;
+  --font-type: "Special Elite", "Courier New", monospace;
+  --font-body: Georgia, "Times New Roman", serif;
+
+  /* Type scale */
+  --step--1: 0.82rem;
+  --step-0: 1rem;
+  --step-1: 1.3rem;
+  --step-2: 1.75rem;
+  --step-3: 2.6rem;
+  --step-4: clamp(2.4rem, 6vw, 4rem);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background-color: var(--sea-deep);
+  /* Ocean depth + faint wave banding, all CSS (no external assets) */
+  background-image:
+    radial-gradient(120% 90% at 50% -10%, var(--sea-mid) 0%, var(--sea-deep) 60%),
+    repeating-linear-gradient(
+      -8deg,
+      rgba(255, 255, 255, 0.028) 0px,
+      rgba(255, 255, 255, 0.028) 2px,
+      transparent 2px,
+      transparent 22px
+    );
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* ---------- App shell ---------- */
+.app {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.75rem;
+  border-bottom: 3px double rgba(239, 227, 198, 0.45);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--step-4);
+  line-height: 1;
+  color: var(--parchment);
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 0 var(--marine-red-dark), 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+/* Small "manifest" eyebrow above the title */
+.app-header h1::before {
+  content: "⚓ Marine Bounty Registry";
+  display: block;
+  font-family: var(--font-type);
+  font-size: var(--step--1);
+  font-weight: 400;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-shadow: none;
+  margin-bottom: 0.5rem;
+}
+
+.add-btn {
+  font-family: var(--font-name);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: var(--step--1);
+  color: var(--parchment);
+  background: var(--marine-red);
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+  padding: 0.7rem 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--marine-red-dark), 0 6px 12px rgba(0, 0, 0, 0.35);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.add-btn:hover {
+  transform: translateY(-1px) rotate(-1deg);
+}
+
+.add-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--marine-red-dark);
+}
+
+/* ---------- Search ---------- */
+.search-bar {
+  width: 100%;
+  font-family: var(--font-type);
+  font-size: var(--step-0);
+  color: var(--ink);
+  background: var(--parchment);
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 2rem;
+  box-shadow: inset 0 2px 5px rgba(45, 30, 18, 0.25);
+}
+
+.search-bar::placeholder {
+  color: var(--ink-soft);
+  opacity: 0.75;
+}
+
+.search-bar:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* ---------- Status messages ---------- */
+.banner-error {
+  font-family: var(--font-type);
+  color: var(--parchment);
+  background: var(--marine-red);
+  border: 2px solid var(--ink);
+  padding: 0.75rem 1rem;
+  margin: 0 0 1.5rem;
+  border-radius: 2px;
+}
+
+.loading,
+.empty {
+  font-family: var(--font-name);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--parchment);
+  text-align: center;
+  padding: 3rem 1rem;
+  opacity: 0.85;
+}
+
+/* ---------- Poster grid ---------- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2.25rem 1.75rem;
+  align-items: start;
+}
+
+/* ---------- WANTED poster card ---------- */
+.card {
+  position: relative;
+  background-color: var(--parchment);
+  background-image:
+    radial-gradient(90% 60% at 50% 40%, rgba(255, 255, 255, 0.35), transparent 70%),
+    radial-gradient(60% 50% at 15% 90%, rgba(120, 85, 40, 0.22), transparent 60%),
+    radial-gradient(50% 40% at 88% 12%, rgba(120, 85, 40, 0.18), transparent 60%),
+    linear-gradient(160deg, var(--parchment) 0%, var(--parchment-2) 100%);
+  border: 1px solid var(--parchment-edge);
+  padding: 2.6rem 1.1rem 1.1rem;
+  box-shadow:
+    inset 0 0 0 2px rgba(45, 30, 18, 0.5),
+    inset 0 0 34px rgba(120, 85, 40, 0.28),
+    0 10px 22px rgba(0, 0, 0, 0.45);
+  text-align: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Slight pinned-poster rotation, varied per position */
+.card:nth-child(3n + 1) { transform: rotate(-1.4deg); }
+.card:nth-child(3n + 2) { transform: rotate(0.8deg); }
+.card:nth-child(3n + 3) { transform: rotate(-0.5deg); }
+
+.card:hover {
+  transform: rotate(0deg) translateY(-3px);
+  box-shadow:
+    inset 0 0 0 2px rgba(45, 30, 18, 0.5),
+    inset 0 0 34px rgba(120, 85, 40, 0.28),
+    0 16px 30px rgba(0, 0, 0, 0.55);
+  z-index: 2;
+}
+
+/* "WANTED" banner printed at the top of every poster */
+.card::before {
+  content: "WANTED";
+  display: block;
+  position: absolute;
+  top: 0.55rem;
+  left: 0;
+  right: 0;
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  letter-spacing: 0.14em;
+  color: var(--marine-red);
+}
+
+/* Bit of tape at the top corner */
+.card::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  width: 74px;
+  height: 22px;
+  background: rgba(214, 199, 161, 0.55);
+  border: 1px solid rgba(120, 85, 40, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.card-avatar {
+  width: 100%;
+  max-width: 190px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  margin: 0.4rem auto 0.9rem;
+  display: block;
+  border: 3px solid var(--ink);
+  filter: sepia(0.35) contrast(1.03);
+  background: var(--parchment-2);
+}
+
+.card-name {
+  font-family: var(--font-name);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: var(--step-1);
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  margin: 0 0 0.35rem;
+}
+
+.card-epithet {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: var(--step-0);
+  color: var(--ink-soft);
+  margin: 0 0 0.6rem;
+}
+
+.card-crew {
+  font-family: var(--font-type);
+  font-size: var(--step--1);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  margin: 0 0 0.75rem;
+}
+
+/* "DEAD OR ALIVE" line printed above the bounty */
+.card-bounty::before {
+  content: "Dead or Alive";
+  display: block;
+  font-family: var(--font-type);
+  font-size: var(--step--1);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--marine-red);
+  margin-bottom: 0.15rem;
+}
+
+.card-bounty {
+  font-family: var(--font-name);
+  font-weight: 700;
+  font-size: var(--step-2);
+  color: var(--ink);
+  border-top: 2px solid var(--ink);
+  padding-top: 0.65rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+}
+
+.card-actions button {
+  font-family: var(--font-name);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--step--1);
+  padding: 0.45rem 0.9rem;
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ink);
+  transition: transform 0.1s ease, background 0.1s ease, color 0.1s ease;
+}
+
+.card-actions button:first-child:hover {
+  background: var(--ink);
+  color: var(--parchment);
+}
+
+.card-actions button:last-child {
+  border-color: var(--marine-red-dark);
+  color: var(--marine-red-dark);
+}
+
+.card-actions button:last-child:hover {
+  background: var(--marine-red);
+  color: var(--parchment);
+}
+
+.card-actions button:active {
+  transform: translateY(1px);
+}
+
+/* ---------- Modal / registration document ---------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 26, 33, 0.78);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  overflow-y: auto;
+  z-index: 50;
+}
+
+.modal {
+  width: 100%;
+  max-width: 540px;
+  background-color: var(--parchment);
+  background-image: linear-gradient(160deg, var(--parchment) 0%, var(--parchment-2) 100%);
+  border: 2px solid var(--ink);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6), inset 0 0 0 6px rgba(45, 30, 18, 0.08);
+  padding: 1.75rem 1.75rem 2rem;
+}
+
+.modal h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--step-2);
+  color: var(--marine-red);
+  text-align: center;
+  margin: 0 0 1.25rem;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- Form ---------- */
+.character-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.character-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-family: var(--font-type);
+  font-size: var(--step--1);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+}
+
+.character-form input,
+.character-form textarea {
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.5);
+  border: 0;
+  border-bottom: 2px solid var(--ink-soft);
+  padding: 0.45rem 0.4rem;
+}
+
+.character-form textarea {
+  min-height: 4.5rem;
+  resize: vertical;
+  border: 2px solid var(--ink-soft);
+}
+
+.character-form input:focus-visible,
+.character-form textarea:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+  border-color: var(--ink);
+}
+
+.form-error {
+  font-family: var(--font-type);
+  color: var(--parchment);
+  background: var(--marine-red);
+  border: 2px solid var(--ink);
+  padding: 0.6rem 0.8rem;
+  margin: 0;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.form-actions button {
+  flex: 1;
+  font-family: var(--font-name);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: var(--step--1);
+  padding: 0.7rem 1rem;
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.form-actions button[type="submit"] {
+  background: var(--marine-red);
+  color: var(--parchment);
+  box-shadow: 0 3px 0 var(--marine-red-dark);
+}
+
+.form-actions button[type="button"] {
+  background: transparent;
+  color: var(--ink);
+}
+
+.form-actions button:active {
+  transform: translateY(2px);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 560px) {
+  .app {
+    padding: 1.5rem 0.9rem 3rem;
+  }
+  .app-header {
+    align-items: flex-start;
+  }
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+  .card:nth-child(n) {
+    transform: rotate(0deg);
+  }
+}
+
+/* ---------- Motion preferences ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  .card,
+  .add-btn,
+  .card-actions button {
+    transition: none !important;
+  }
+  .card:nth-child(n) {
+    transform: none;
+  }
+}

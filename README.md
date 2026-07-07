@@ -1,0 +1,111 @@
+# One Piece Character Manager
+
+A CRUD web app for managing One Piece characters, themed as a **Marine Bounty
+Registry** — each character is rendered as a weathered "WANTED" poster. Data is
+persisted in SQLite, so it survives restarts.
+
+![Stack](https://img.shields.io/badge/stack-Express%20%2B%20React%20%2B%20SQLite-b23029)
+
+## Features
+
+- Full CRUD: create, read, update, delete characters
+- Persistent storage via SQLite (`better-sqlite3`)
+- Search/filter by name or crew
+- Validation on both client and server
+- Character images (URL) with a placeholder fallback
+- Seeded on first run with the Straw Hat crew
+
+## Architecture
+
+```
+crud-project/
+├── server/          # Express REST API + SQLite
+│   ├── db.js        # createDb(path) factory: schema + seed
+│   ├── seed.js      # Straw Hat seed data
+│   ├── validate.js  # validateCharacter(body)
+│   ├── routes/characters.js
+│   ├── app.js       # createApp(db) -> Express app (no listen)
+│   ├── index.js     # opens characters.db, starts server on :3001
+│   └── tests/       # jest + supertest
+└── client/          # React + Vite (dev server proxies /api -> :3001)
+    └── src/
+        ├── api.js
+        ├── App.jsx
+        └── components/
+```
+
+## Prerequisites
+
+- **Node.js 18+** (developed on Node 22). `better-sqlite3` installs a prebuilt
+  binary on common platforms; if none is available for yours, npm will compile
+  it, which needs standard C/C++ build tools.
+
+## Setup
+
+Install dependencies in both packages:
+
+```bash
+cd server && npm install
+cd ../client && npm install
+```
+
+## Running
+
+Start the backend (terminal 1):
+
+```bash
+cd server && npm start        # http://localhost:3001
+```
+
+Start the frontend (terminal 2):
+
+```bash
+cd client && npm run dev      # http://localhost:5173
+```
+
+Open http://localhost:5173. The Vite dev server proxies `/api` requests to the
+backend, so no CORS configuration is needed. On first backend start,
+`server/characters.db` is created and seeded with the Straw Hat crew.
+
+## Testing
+
+```bash
+cd server && npm test
+```
+
+Backend tests run against an in-memory SQLite database (the `createDb(':memory:')`
+factory), covering CRUD, validation, search, and error paths.
+
+## API Reference
+
+Base path: `/api/characters`
+
+| Method | Route                      | Purpose                                   | Success |
+|--------|----------------------------|-------------------------------------------|---------|
+| GET    | `/api/characters?search=`  | List all; optional name/crew filter       | 200     |
+| GET    | `/api/characters/:id`      | Fetch one                                 | 200/404 |
+| POST   | `/api/characters`          | Create (validated)                        | 201/400 |
+| PUT    | `/api/characters/:id`      | Full-replace update (validated)           | 200/400/404 |
+| DELETE | `/api/characters/:id`      | Delete                                    | 204/404 |
+| GET    | `/api/health`              | Health check → `{ "ok": true }`           | 200     |
+
+**Character shape:**
+
+```json
+{
+  "id": 1,
+  "name": "Monkey D. Luffy",
+  "epithet": "Straw Hat",
+  "crew": "Straw Hat Pirates",
+  "devil_fruit": "Gomu Gomu no Mi (Hito Hito no Mi, Model: Nika)",
+  "bounty": 3000000000,
+  "role": "Captain",
+  "image_url": "",
+  "description": "Rubber-bodied captain who dreams of becoming King of the Pirates.",
+  "created_at": "2026-07-07T00:00:00.000Z"
+}
+```
+
+**Validation:** `name` is required (non-empty). `bounty` is optional; if
+provided it must be a non-negative safe integer. Errors return `400` with
+`{ "errors": [ ... ] }`; other failures return JSON `{ "error": "..." }`.
