@@ -1,0 +1,362 @@
+[
+  {
+    "name": "Monkey D. Luffy",
+    "epithet": "Straw Hat",
+    "crew": "Straw Hat Pirates",
+    "devil_fruit": "Gomu Gomu no Mi (Hito Hito no Mi, Model: Nika)",
+    "bounty": 3000000000,
+    "role": "Captain",
+    "image_url": "/characters/monkey-d-luffy.jpg",
+    "description": "Rubber-bodied captain who dreams of becoming King of the Pirates."
+  },
+  {
+    "name": "Roronoa Zoro",
+    "epithet": "Pirate Hunter",
+    "crew": "Straw Hat Pirates",
+    "devil_fruit": "",
+    "bounty": 1111000000,
+    "role": "Swordsman",
+    "image_url": "/characters/roronoa-zoro.jpg",
+    "description": "Three-sword-style swordsman aiming to be the world's greatest."
+  },
+  {
+    "name": "Nami",
+    "epithet": "Cat Burglar",
+    "crew": "Straw Hat Pirates",
+    "devil_fruit": "",
+    "bounty": 366000000,
+    "role": "Navigator",
+    "image_url": "/characters/nami.jpg",
+    "description": "Master navigator with a talent for weather and treasure."
+  },
+  {
+    "name": "Usopp",
+    "epithet": "God Usopp",
+    "crew": "Straw Hat Pirates",
+    "devil_fruit": "",
+    "bounty": 500000000,
+    "role": "Sniper",
+    "image_url": "/characters/usopp.jpg",
+    "description": "Long-nosed sharpshooter and teller of tall tales."
+  },
+  {
+    "name": "Vinsmoke Sanji",
+    "epithet": "Black Leg",
+    "crew": "Straw Hat Pirates",
+    "devil_fruit": "",
+    "bounty": 1032000000,
+    "role": "Cook",
+    "image_url": "/characters/vinsmoke-sanji.jpg",
+    "description": "Chivalrous cook who fights only with his legs."
+  },
+  {
+    "name": "Tony Tony Chopper",
+    "epithet": "Cotton Candy Lover",
+    "crew": "Straw Hat Pirates",
+    "devil_fruit": "Hito Hito no Mi",
+    "bounty": 1000,
+    "role": "Doctor",
+    "image_url": "/characters/tony-tony-chopper.jpg",
+    "description": "Reindeer doctor who ate a Human-Human Fruit."
+  },
+  {
+    "name": "Nico Robin",
+    "epithet": "Devil Child",
+    "crew": "Straw Hat Pirates",
+    "devil_fruit": "Hana Hana no Mi",
+    "bounty": 930000000,
+    "role": "Archaeologist",
+    "image_url": "/characters/nico-robin.jpg",
+    "description": "Archaeologist who can read the lost Poneglyphs."
+  },
+  {
+    "name": "Franky",
+    "epithet": "Iron Man",
+    "crew": "Straw Hat Pirates",
+    "devil_fruit": "",
+    "bounty": 394000000,
+    "role": "Shipwright",
+    "image_url": "/characters/franky.jpg",
+    "description": "Cyborg shipwright who built the Thousand Sunny."
+  },
+  {
+    "name": "Brook",
+    "epithet": "Soul King",
+    "crew": "Straw Hat Pirates",
+    "devil_fruit": "Yomi Yomi no Mi",
+    "bounty": 383000000,
+    "role": "Musician",
+    "image_url": "/characters/brook.jpg",
+    "description": "Living skeleton musician revived by the Revive-Revive Fruit."
+  },
+  {
+    "name": "Jinbe",
+    "epithet": "Knight of the Sea",
+    "crew": "Straw Hat Pirates",
+    "devil_fruit": "",
+    "bounty": 1100000000,
+    "role": "Helmsman",
+    "image_url": "/characters/jinbe.jpg",
+    "description": "Fish-man helmsman and master of Fish-Man Karate."
+  },
+  {
+    "name": "Portgas D. Ace",
+    "epithet": "Fire Fist",
+    "crew": "Whitebeard Pirates",
+    "devil_fruit": "Mera Mera no Mi",
+    "bounty": 550000000,
+    "role": "2nd Division Commander",
+    "image_url": "/characters/portgas-d-ace.jpg",
+    "description": "Luffy's sworn brother and wielder of the Flame-Flame Fruit."
+  },
+  {
+    "name": "Sabo",
+    "epithet": "Flame Emperor",
+    "crew": "Revolutionary Army",
+    "devil_fruit": "Mera Mera no Mi",
+    "bounty": 602000000,
+    "role": "Chief of Staff",
+    "image_url": "/characters/sabo.jpg",
+    "description": "Revolutionary and Luffy's other sworn brother."
+  },
+  {
+    "name": "Trafalgar Law",
+    "epithet": "Surgeon of Death",
+    "crew": "Heart Pirates",
+    "devil_fruit": "Ope Ope no Mi",
+    "bounty": 3000000000,
+    "role": "Captain",
+    "image_url": "/characters/trafalgar-law.jpg",
+    "description": "Doctor-pirate wielding the reality-warping Op-Op Fruit."
+  },
+  {
+    "name": "Eustass Kid",
+    "epithet": "Captain",
+    "crew": "Kid Pirates",
+    "devil_fruit": "",
+    "bounty": 3000000000,
+    "role": "Captain",
+    "image_url": "/characters/eustass-kid.jpg",
+    "description": "Supernova captain who commands magnetic force."
+  },
+  {
+    "name": "Shanks",
+    "epithet": "Red-Haired",
+    "crew": "Red Hair Pirates",
+    "devil_fruit": "",
+    "bounty": 4048900000,
+    "role": "Emperor",
+    "image_url": "/characters/shanks.jpg",
+    "description": "Yonko who inspired Luffy and gave him the straw hat."
+  },
+  {
+    "name": "Marshall D. Teach",
+    "epithet": "Blackbeard",
+    "crew": "Blackbeard Pirates",
+    "devil_fruit": "Yami Yami no Mi & Gura Gura no Mi",
+    "bounty": 3996000000,
+    "role": "Emperor",
+    "image_url": "/characters/marshall-d-teach.jpg",
+    "description": "Yonko who wields two Devil Fruit powers."
+  },
+  {
+    "name": "Charlotte Linlin",
+    "epithet": "Big Mom",
+    "crew": "Big Mom Pirates",
+    "devil_fruit": "Soru Soru no Mi",
+    "bounty": 4388000000,
+    "role": "Emperor",
+    "image_url": "/characters/charlotte-linlin.jpg",
+    "description": "Yonko who rules Totto Land with the Soul-Soul Fruit."
+  },
+  {
+    "name": "Kaido",
+    "epithet": "of the Beasts",
+    "crew": "Beasts Pirates",
+    "devil_fruit": "Uo Uo no Mi, Model: Seiryu",
+    "bounty": 4611100000,
+    "role": "Emperor",
+    "image_url": "/characters/kaido.jpg",
+    "description": "Yonko said to be the strongest creature alive."
+  },
+  {
+    "name": "Edward Newgate",
+    "epithet": "Whitebeard",
+    "crew": "Whitebeard Pirates",
+    "devil_fruit": "Gura Gura no Mi",
+    "bounty": 5046000000,
+    "role": "Captain",
+    "image_url": "/characters/edward-newgate.jpg",
+    "description": "The Strongest Man in the World, wielder of the Tremor-Tremor Fruit."
+  },
+  {
+    "name": "Marco",
+    "epithet": "the Phoenix",
+    "crew": "Whitebeard Pirates",
+    "devil_fruit": "Tori Tori no Mi, Model: Phoenix",
+    "bounty": 1374000000,
+    "role": "1st Division Commander",
+    "image_url": "/characters/marco.jpg",
+    "description": "Whitebeard's right hand, a phoenix Zoan user."
+  },
+  {
+    "name": "Charlotte Katakuri",
+    "epithet": "",
+    "crew": "Big Mom Pirates",
+    "devil_fruit": "Mochi Mochi no Mi",
+    "bounty": 1057000000,
+    "role": "Sweet Commander",
+    "image_url": "/characters/charlotte-katakuri.jpg",
+    "description": "Big Mom's strongest son with future-sight Observation Haki."
+  },
+  {
+    "name": "Dracule Mihawk",
+    "epithet": "Hawk-Eyes",
+    "crew": "Cross Guild",
+    "devil_fruit": "",
+    "bounty": 3590000000,
+    "role": "Swordsman",
+    "image_url": "/characters/dracule-mihawk.jpg",
+    "description": "The world's greatest swordsman and Zoro's goal."
+  },
+  {
+    "name": "Crocodile",
+    "epithet": "Sir Crocodile",
+    "crew": "Cross Guild",
+    "devil_fruit": "Suna Suna no Mi",
+    "bounty": 1965000000,
+    "role": "Executive",
+    "image_url": "/characters/crocodile.jpg",
+    "description": "Former Warlord who commands sand."
+  },
+  {
+    "name": "Donquixote Doflamingo",
+    "epithet": "Heavenly Yaksha",
+    "crew": "Donquixote Pirates",
+    "devil_fruit": "Ito Ito no Mi",
+    "bounty": 340000000,
+    "role": "Captain",
+    "image_url": "/characters/donquixote-doflamingo.jpg",
+    "description": "Former Warlord and Shichibukai who controls people like strings."
+  },
+  {
+    "name": "Boa Hancock",
+    "epithet": "Pirate Empress",
+    "crew": "Kuja Pirates",
+    "devil_fruit": "Mero Mero no Mi",
+    "bounty": 1659000000,
+    "role": "Captain",
+    "image_url": "/characters/boa-hancock.jpg",
+    "description": "The most beautiful woman in the world, ruler of Amazon Lily."
+  },
+  {
+    "name": "Buggy",
+    "epithet": "the Clown",
+    "crew": "Cross Guild",
+    "devil_fruit": "Bara Bara no Mi",
+    "bounty": 3189000000,
+    "role": "Emperor",
+    "image_url": "/characters/buggy.jpg",
+    "description": "Chop-Chop Fruit user swept up into the ranks of the Yonko."
+  },
+  {
+    "name": "Monkey D. Dragon",
+    "epithet": "the Revolutionary",
+    "crew": "Revolutionary Army",
+    "devil_fruit": "",
+    "bounty": null,
+    "role": "Supreme Commander",
+    "image_url": "/characters/monkey-d-dragon.jpg",
+    "description": "The world's most wanted man and Luffy's father."
+  },
+  {
+    "name": "Monkey D. Garp",
+    "epithet": "Garp the Fist",
+    "crew": "Marines",
+    "devil_fruit": "",
+    "bounty": null,
+    "role": "Vice Admiral",
+    "image_url": "/characters/monkey-d-garp.jpg",
+    "description": "Legendary Marine hero and Luffy's grandfather."
+  },
+  {
+    "name": "Sengoku",
+    "epithet": "the Buddha",
+    "crew": "Marines",
+    "devil_fruit": "Hito Hito no Mi, Model: Daibutsu",
+    "bounty": null,
+    "role": "Fleet Admiral",
+    "image_url": "/characters/sengoku.jpg",
+    "description": "Former Fleet Admiral who transforms into a great Buddha."
+  },
+  {
+    "name": "Sakazuki",
+    "epithet": "Akainu",
+    "crew": "Marines",
+    "devil_fruit": "Magu Magu no Mi",
+    "bounty": null,
+    "role": "Fleet Admiral",
+    "image_url": "/characters/sakazuki.jpg",
+    "description": "Ruthless Fleet Admiral wielding magma."
+  },
+  {
+    "name": "Borsalino",
+    "epithet": "Kizaru",
+    "crew": "Marines",
+    "devil_fruit": "Pika Pika no Mi",
+    "bounty": null,
+    "role": "Admiral",
+    "image_url": "/characters/borsalino.jpg",
+    "description": "Admiral who moves at the speed of light."
+  },
+  {
+    "name": "Kuzan",
+    "epithet": "Aokiji",
+    "crew": "Blackbeard Pirates",
+    "devil_fruit": "Hie Hie no Mi",
+    "bounty": null,
+    "role": "Former Admiral",
+    "image_url": "/characters/kuzan.jpg",
+    "description": "Former Marine admiral who commands ice."
+  },
+  {
+    "name": "Smoker",
+    "epithet": "White Hunter",
+    "crew": "Marines",
+    "devil_fruit": "Moku Moku no Mi",
+    "bounty": null,
+    "role": "Vice Admiral",
+    "image_url": "/characters/smoker.jpg",
+    "description": "Cigar-chewing Marine who turns into smoke."
+  },
+  {
+    "name": "Koby",
+    "epithet": "",
+    "crew": "Marines",
+    "devil_fruit": "",
+    "bounty": null,
+    "role": "Captain",
+    "image_url": "/characters/koby.jpg",
+    "description": "Marine prodigy who started out alongside Luffy."
+  },
+  {
+    "name": "Rob Lucci",
+    "epithet": "",
+    "crew": "CP0",
+    "devil_fruit": "Neko Neko no Mi, Model: Leopard",
+    "bounty": null,
+    "role": "Agent",
+    "image_url": "/characters/rob-lucci.jpg",
+    "description": "Elite government assassin and leopard Zoan user."
+  },
+  {
+    "name": "Nefertari Vivi",
+    "epithet": "",
+    "crew": "Alabasta Kingdom",
+    "devil_fruit": "",
+    "bounty": null,
+    "role": "Princess",
+    "image_url": "/characters/nefertari-vivi.jpg",
+    "description": "Princess of Alabasta and honorary Straw Hat."
+  }
+]

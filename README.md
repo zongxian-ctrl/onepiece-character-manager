@@ -6,6 +6,14 @@ persisted in SQLite, so it survives restarts.
 
 ![Stack](https://img.shields.io/badge/stack-Express%20%2B%20React%20%2B%20SQLite-b23029)
 
+## Live demo
+
+A static build is deployed to **GitHub Pages** on every push to `main` (see
+`.github/workflows/deploy-pages.yml`). Since Pages can't run the Node backend,
+the hosted build runs entirely in the browser: it's seeded with the bundled
+characters and does create/edit/delete against `localStorage` (changes are
+per-visitor, not shared). The local full-stack app below is unaffected.
+
 ## Features
 
 - Full CRUD: create, read, update, delete characters
