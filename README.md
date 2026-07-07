@@ -8,6 +8,8 @@ persisted in SQLite, so it survives restarts.
 
 ## Live demo
 
+**https://zongxian-ctrl.github.io/onepiece-character-manager/**
+
 A static build is deployed to **GitHub Pages** on every push to `main` (see
 `.github/workflows/deploy-pages.yml`). Since Pages can't run the Node backend,
 the hosted build runs entirely in the browser: it's seeded with the bundled
