@@ -84,6 +84,21 @@ cd client && npm run build    # production build (catches import/syntax errors)
   (`App.jsx`). This is expected; automated tools that set the input value
   directly may not trigger React's onChange — type character-by-character.
 
+## Seed data & character images
+
+- `server/seed.js` holds ~36 notable characters and is **generated** by
+  `scripts/build-seed.mjs` — edit the curated list in that script, not the seed
+  file. The script fetches each character's portrait from the Jikan
+  (MyAnimeList) API and downloads it into `client/public/characters/<slug>.jpg`;
+  `image_url` in the seed points at that local path (served by the client, so
+  the app works offline). Character metadata (bounty, crew, Devil Fruit, etc.)
+  is curated in the script for accuracy, not fetched.
+- Regenerate: `node scripts/build-seed.mjs`. To re-seed the running app after
+  regenerating, stop the backend, delete `server/characters.db*`, and restart
+  (seeding only runs on an empty table).
+- The downloaded images under `client/public/characters/` are committed as app
+  assets (not gitignored).
+
 ## Docs
 
 - Design spec: `docs/superpowers/specs/2026-07-07-onepiece-crud-design.md`
