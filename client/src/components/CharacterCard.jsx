@@ -17,9 +17,20 @@ function resolveSrc(url) {
   return url;
 }
 
-export default function CharacterCard({ character, onEdit, onDelete }) {
+export default function CharacterCard({ character, fx, onAttack, onEdit, onDelete }) {
+  const captured = character.max_hp != null && character.hp <= 0;
+  const pct =
+    character.max_hp > 0
+      ? Math.max(0, Math.min(100, (character.hp / character.max_hp) * 100))
+      : 0;
+  const hit = fx && fx.id === character.id;
+
   return (
-    <article className="card">
+    <article className={"card" + (captured ? " captured" : "") + (hit ? " is-hit" : "")}>
+      {captured && <span className="stamp" aria-label="Captured">Captured</span>}
+      {hit && fx.characterDamage > 0 && (
+        <span key={fx.ts} className="dmg-float">−{fx.characterDamage}</span>
+      )}
       <img
         className="card-avatar"
         src={resolveSrc(character.image_url)}
@@ -29,8 +40,32 @@ export default function CharacterCard({ character, onEdit, onDelete }) {
       <h2 className="card-name">{character.name}</h2>
       {character.epithet && <p className="card-epithet">"{character.epithet}"</p>}
       {character.crew && <p className="card-crew">{character.crew}</p>}
-      <p className="card-bounty">{formatBounty(character.bounty)}</p>
+
+      {character.max_hp != null && (
+        <>
+          <div
+            className="hp-track"
+            role="meter"
+            aria-label={`${character.name} health`}
+            aria-valuemin={0}
+            aria-valuemax={character.max_hp}
+            aria-valuenow={character.hp}
+          >
+            <div className="hp-fill" style={{ width: `${pct}%` }} />
+          </div>
+          <p className="card-stats">
+            HP {character.hp}/{character.max_hp} · ATK {character.attack} · DEF {character.defense}
+          </p>
+        </>
+      )}
+
+      <p className="card-bounty">
+        {captured ? <span className="bounty-claimed">Bounty claimed</span> : formatBounty(character.bounty)}
+      </p>
       <div className="card-actions">
+        {!captured && (
+          <button className="attack-btn" onClick={() => onAttack(character)}>Attack</button>
+        )}
         <button onClick={() => onEdit(character)}>Edit</button>
         <button onClick={() => onDelete(character)}>Delete</button>
       </div>
